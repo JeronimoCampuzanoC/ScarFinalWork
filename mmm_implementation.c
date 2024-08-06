@@ -3,22 +3,19 @@
 #include <time.h>
 #include <omp.h>
 
-/*
-Original values
+
+
 #define N 50
 #define MIN_SIZE 2
 #define MAX_SIZE 5000
-*/
-#define N 10
-#define MIN_SIZE 2
-#define MAX_SIZE 1000
+
 #define MAX_NUM 10000000.0
 #define BLOCK_SIZE 32
 
 int main()
 {
     srand((unsigned)time(NULL));
-    int size = 1200/*MIN_SIZE + (rand() % MAX_SIZE)*/, iterator = 0;
+    int size = MIN_SIZE + (rand() % MAX_SIZE), iterator = 0;
     double time_spent = 0.0;
     
     double A[size][size] __attribute__((aligned(64)));
@@ -34,7 +31,7 @@ int main()
         // Start modifying here
 
         
-        #pragma omp parallel for
+        #pragma omp parallel for collapse(2)
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -46,8 +43,8 @@ int main()
         }
 
         // New ALgorithm Loop Interchanging:
-
-        #pragma omp parallel for
+        //Mejor rendimiento colapsando 2
+        #pragma omp parallel for collapse(2)
         for (int i = 0; i < size; ++i) {
             for (int k = 0; k < size; ++k) {
                 for (int j = 0; j < size; ++j) {
