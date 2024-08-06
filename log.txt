@@ -1,0 +1,14 @@
+#include <omp.h> paralization
+
+#pragma omp parallel for
+
+// New ALgorithm Loop Interchanging:
+
+
+flag del compilador -O3, optimiza el codigo con unrolling llops y vectorizacion
+gcc -o bin/mmm mmm_implementation.c -fopenmp -O3
+
+-march=native: Tells the compiler to generate code specifically for your target CPU architecture.
+-mtune=native: Similar to -march, but focuses on performance tuning for the specific CPU model.
+
+Implementar un condicional para usar omp o no dependiendo del tamaño de la matriz
