@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --partition=longjobs
+#SBATCH --partition=learning
 #SBATCH --nodes=1
 #SBATCH --time=05:00:00
 #SBATCH --job-name=MMM-SCAR
@@ -8,5 +8,5 @@
 #SBATCH --exclusive
 
 ulimit -s unlimited
-cd /home/user/Final-Workshop/bin
+cd /home/JERONIMO_CAMPUZANO/SCARFINALWORK/bin
 ./mmm

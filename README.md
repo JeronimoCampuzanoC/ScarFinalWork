@@ -1,82 +1,23 @@
 # Final Workshop
 
-## Contents
-- [Running](#running)
-- [Recommendations](#recommendations)
-- [Authors](#authors)
+To run the program, you should execute the runCompile.sh script to compile the source code with all the optimization flags of GCC. After that, you can run the command sbatch job.sh to place the program in the queue in the learning partition.
 
-## Running
+## Optimization
 
-1. Access APOLO in the corresponding schedule.
+The OpenMP API reduces the execution time using parallel programming techniques.
 
-2. At a terminal, run the following command:
-    ```
-    git clone https://github.com/SCAR-EAFIT/Final-Workshop
-    ```
+I implemented the #pragma omp parallel for collapse(2) directive to apply parallelization in the for loop. The collapse(2) option provided better performance in an experimental setting compared to collapse(3), possibly due to the shared memory usage by the caches.
 
-3. Go to the directory where you cloned the project:
-    ```
-    cd Final-Workshop
-    ```
+#pragma omp parallel for collapse(2)
 
-4. Create a `bin` directory inside the root of the project:
-    ```
-    mkdir bin
-    ```
+I also implemented a more efficient multiplication algorithm that uses loop interchange.
 
-5. Compile the `mmm_implementation.c` file inside the bin directory:
-    ```
-    gcc -o bin/mmm mmm_implementation.c
-    ```
+The program is compiled with several GCC optimization flags, including:
 
-6. Run the program:
-    - In APOLO:
-        ```
-        sbatch job.sh
-        ```
+-fopenmp: Enables OpenMP to generate parallel code.
+-O3: Merges and eliminates dead code, performs common subexpression elimination, strict aliasing, function inlining, and vectorization.
+-fprefetch-loop-arrays: Enables the speculation of data into the cache before it is needed, improving memory access.
+-march=native: Generates code for the specific CPU architecture of the machine.
+-mtune=native: Generates code optimized for the specific CPU model.
 
-    - In you pc:
-        ```
-        ./bin/mmm
-        ```
-
-
-**NOTE:** If you have the following message or something similar
-```
-[1]    2460040 segmentation fault (core dumped)  ./bin/mmm
-```
-It is because the program uses very long arrays, and it is probably a stack overflow problem that you can solve by executing:
-```
-ulimit -s unlimited
-```
-Run the program again and it should work. If any of these solutions help you, you can always contact us!
-
-**NOTE:** by default, the program will create random arrays from `2x2` to `5000x5000`, and perform `50` tests. If you are going to run the program on your pc or perform tests in APOLO, we recommend that you change these parameters, for example:
-```
-#define N 10
-#define MIN_SIZE 2
-#define MAX_SIZE 1000
-```
-When you run the final test of the program, you should recover the original values:
-```
-#define N 50
-#define MIN_SIZE 2
-#define MAX_SIZE 5000
-```
-
-## Recommendations
-
-When you open the `mmm_implementation.c` file, you will see some comments, indicating the starting point endpoint to modify.
-
-Search for information on the Internet. Please do not rely on AI's, such as ChatGPT, Claude, or Gemini; you can use them for support, but they can also be wrong.
-
-You have your own time to access APOLO, don't forget to respect these times, because other people also need access. Before you start testing in APOLO you should test and modify the code on your pc.
-
-Create your own GitHub repository and clone it in APOLO, it will be easier for you.
-
-Always run the `job.sh` script to test the `mmm_implementation.c`.
-
-## Authors
-- Juan Manuel Gómez
-- Santiago Rodriguez
-- Santiago Neusa
+I prefer to use double C[size][size] __attribute__((aligned(64))) because it provides better performance on modern CPUs than malloc.
